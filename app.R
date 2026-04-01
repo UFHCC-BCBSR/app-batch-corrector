@@ -330,20 +330,25 @@ server <- function(input, output, session) {
       matched_samples <- c()
       sample_mapping <- c()
       
-      for(sample_name in sample_processed$sample_name) {
-        # Normalize by converting both - and . to the same character for matching
-        normalized_sample <- gsub("[-.]", ".", sample_name)
-        normalized_cols <- gsub("[-.]", ".", potential_sample_cols)
-        
-        # Find matches using normalized versions
-        match_indices <- grep(normalized_sample, normalized_cols, fixed = TRUE)
-        if(length(match_indices) > 0) {
-          # Use the original column name (not the normalized version)
-          matched_samples <- c(matched_samples, potential_sample_cols[match_indices[1]])
-          sample_mapping <- c(sample_mapping, sample_name)
-        }
-      }
-      
+for(sample_name in sample_processed$sample_name) {
+  # Normalize by converting both - and . to the same character for matching
+  normalized_sample <- gsub("[-.]", ".", sample_name)
+  normalized_cols <- gsub("[-.]", ".", potential_sample_cols)
+  
+  # Use fixed = TRUE so the normalized name is treated as a literal string, not regex
+  match_indices <- which(normalized_cols == normalized_sample)
+  
+  # If exact match fails, fall back to partial match (also fixed)
+  if(length(match_indices) == 0) {
+    match_indices <- grep(normalized_sample, normalized_cols, fixed = TRUE)
+  }
+  
+  if(length(match_indices) > 0) {
+    matched_samples <- c(matched_samples, potential_sample_cols[match_indices[1]])
+    sample_mapping <- c(sample_mapping, sample_name)
+  }
+}
+
       if(length(matched_samples) > 0) {
         # Create count matrix with only matched samples
         count_matrix <- as.matrix(count_processed[, matched_samples, drop = FALSE])
@@ -422,6 +427,8 @@ server <- function(input, output, session) {
     # Add small pseudocount to handle zeros
     count_matrix <- log2(count_matrix + 1)
     
+  # Add this line right here
+  count_matrix <- count_matrix[apply(count_matrix, 1, function(x) all(is.finite(x))), ]  
     # Select top 1000 most variable features
     if(nrow(count_matrix) > 1000) {
       vars <- apply(count_matrix, 1, var, na.rm = TRUE)
