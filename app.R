@@ -425,31 +425,19 @@ methods_paragraph <- paste0(
   html_content <- paste0(html_content, '<div class="pca-section"><h3>Before Batch Correction</h3><div class="pca-grid">')
 
   if (!is.null(pca_before_batch_fig)) {
-    html_content <- paste0(html_content,
-                           '<div>', plotly::as_widget(pca_before_batch_fig) |> htmlwidgets::saveWidget(file = tempfile(fileext = ".html"), selfcontained = FALSE),
-                           htmltools::tags$div(plotly::as_widget(pca_before_batch_fig)) |> as.character(),
-                           '</div>')
+    html_content <- paste0(html_content, '<div>', embed_plotly(pca_before_batch_fig), '</div>')
   }
   if (!is.null(pca_before_bio_fig)) {
-    html_content <- paste0(html_content,
-                           '<div>',
-                           htmltools::tags$div(plotly::as_widget(pca_before_bio_fig)) |> as.character(),
-                           '</div>')
+    html_content <- paste0(html_content, '<div>', embed_plotly(pca_before_bio_fig), '</div>')
   }
 
   html_content <- paste0(html_content, '</div><h3>After Batch Correction</h3><div class="pca-grid">')
 
   if (!is.null(pca_after_batch_fig)) {
-    html_content <- paste0(html_content,
-                           '<div>',
-                           htmltools::tags$div(plotly::as_widget(pca_after_batch_fig)) |> as.character(),
-                           '</div>')
+    html_content <- paste0(html_content, '<div>', embed_plotly(pca_after_batch_fig), '</div>')
   }
   if (!is.null(pca_after_bio_fig)) {
-    html_content <- paste0(html_content,
-                           '<div>',
-                           htmltools::tags$div(plotly::as_widget(pca_after_bio_fig)) |> as.character(),
-                           '</div>')
+    html_content <- paste0(html_content, '<div>', embed_plotly(pca_after_bio_fig), '</div>')
   }
 
   html_content <- paste0(html_content, '
