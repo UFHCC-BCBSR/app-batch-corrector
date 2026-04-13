@@ -460,7 +460,8 @@ ui <- dashboardPage(
       menuItem("Upload Data", tabName = "upload", icon = icon("upload")),
       menuItem("Preprocess Data", tabName = "configure", icon = icon("cogs")),
       menuItem("Batch Correction & Scaling", tabName = "correction", icon = icon("magic")),
-      menuItem("Download Results", tabName = "download", icon = icon("download"))
+      menuItem("Download Results", tabName = "download", icon = icon("download")),
+      menuItem("About", tabName = "about", icon = icon("info-circle"))
     )
   ),
   dashboardBody(
@@ -645,6 +646,35 @@ ui <- dashboardPage(
                       h4("PCA after batch correction and scaling:"),
                       plotlyOutput("pca_after", height = "400px")
                     )
+                )
+              )
+      ),
+
+      # About tab
+      tabItem(tabName = "about",
+              fluidRow(
+                box(title = "About Metabo Tools", status = "primary", solidHeader = TRUE, width = 12,
+                    p(strong("Metabo Tools"), "is a web application for metabolomics data preprocessing and batch correction."),
+                    p(tags$em("This tool is currently under active development and testing. Please use results with appropriate caution and report any issues.")),
+                    br(),
+                    h4("Source Code"),
+                    p("The source code is available on GitHub:"),
+                    p(tags$a(href = "https://github.com/UFHCC-BCBSR/app-batch-corrector",
+                             "https://github.com/UFHCC-BCBSR/app-batch-corrector",
+                             target = "_blank")),
+                    br(),
+                    h4("Contact"),
+                    p("For questions, feedback, or to report issues, contact:",
+                      tags$a(href = "mailto:hkates@ufl.edu", "hkates@ufl.edu")),
+                    br(),
+                    h4("Developed in partnership with SECIM"),
+                    p("This tool was developed in partnership with the ",
+                      tags$a(href = "https://secim.ufl.edu/",
+                             "University of Florida Southeast Center for Integrated Metabolomics (SECIM)",
+                             target = "_blank"), "."),
+                    br(),
+                    div(style = "font-size: 12px; color: #888;",
+                        p("University of Florida Health Cancer Center — Biostatistics, Computational Biology, and Bioinformatics Shared Resource (BCBSR)"))
                 )
               )
       ),
