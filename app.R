@@ -1161,7 +1161,14 @@ server <- function(input, output, session) {
   # Downloads
   # ===========================
   output$download_excel <- downloadHandler(
-    filename = function() paste0("metabo_tools_results_", Sys.Date(), ".xlsx"),
+    filename = function() {
+      base <- if (!is.null(input$count_file)) {
+        tools::file_path_sans_ext(basename(input$count_file$name))
+      } else {
+        "metabo_tools"
+      }
+      paste0(base, "_metabo_tools_results_", Sys.Date(), ".xlsx")
+    },
     content = function(file) {
       req(values$matched_data, values$preprocessed_data, values$normalized_data,
           values$normalized_scaled_data, values$batch_corrected_scaled_data,
@@ -1203,7 +1210,14 @@ server <- function(input, output, session) {
   )
 
   output$download_html <- downloadHandler(
-    filename = function() paste0("metabo_tools_report_", Sys.Date(), ".html"),
+    filename = function() {
+      base <- if (!is.null(input$count_file)) {
+        tools::file_path_sans_ext(basename(input$count_file$name))
+      } else {
+        "metabo_tools"
+      }
+      paste0(base, "_metabo_tools_report_", Sys.Date(), ".html")
+    },
     content = function(file) {
       req(values$processing_params)
       generate_html_report(
